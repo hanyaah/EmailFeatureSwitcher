@@ -74,9 +74,11 @@ public class PersonController {
             return HttpStatus.NOT_MODIFIED;
         }else if(!searchP.getPermIsAllowed(permMask) && urlBoolEnable){
             /*already disabled, to enable*/
+            System.out.println("Current state: disabled. Enabling permission. User bitmask: "+permMask);
             searchP.setPermissionTypeMask(searchP.getPermissionTypeMask()+permMask);
         }else if(searchP.getPermIsAllowed(permMask) && !urlBoolEnable){
             /*already enabled, to disable*/
+            System.out.println("Current state: enabled. Disabling permission. User bitmask: "+permMask);
             searchP.setPermissionTypeMask(searchP.getPermissionTypeMask()-permMask);
         }
 
