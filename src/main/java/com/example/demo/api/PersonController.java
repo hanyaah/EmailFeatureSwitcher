@@ -19,7 +19,7 @@ public class PersonController {
     private PersonRepo repo;
 
     /*Sample GET*/
-    /*http://localhost:8080/feature?email=wololo@mail.com&featureName=sendpicture*/
+    /*http://localhost:8080/feature?email=test@mail.com&featureName=attachKoala*/
     @GetMapping("/feature")
     public Map<String,String> getUserAccess(@RequestParam Map<String,String> requestParams){
         Map<String,String> userAccessResponse = new HashMap<>();
@@ -51,6 +51,12 @@ public class PersonController {
         String urlFeatureName = requestParams.get("featureName");
         String urlEmail = requestParams.get("email");
         String urlEnable = requestParams.get("enable");
+
+        if(!urlEnable.equalsIgnoreCase("true") && !urlEnable.equalsIgnoreCase("false")){
+            /*sending in any */
+            return HttpStatus.NOT_MODIFIED;
+        }
+
         Boolean urlBoolEnable=Boolean.valueOf(urlEnable);
 
         Person searchP=repo.findByEmail(urlEmail);
@@ -64,8 +70,9 @@ public class PersonController {
 
         if((searchP.getPermIsAllowed(permMask) && urlBoolEnable) || (!searchP.getPermIsAllowed(permMask) && !urlBoolEnable)){
             /*already enabled, to enable || already disabled, to disable*/
+            System.out.println("Permission already in the same state as intended change. User bitmask: "+permMask);
             return HttpStatus.NOT_MODIFIED;
-        }else if(searchP.getPermIsAllowed(permMask) && urlBoolEnable){
+        }else if(!searchP.getPermIsAllowed(permMask) && urlBoolEnable){
             /*already disabled, to enable*/
             searchP.setPermissionTypeMask(searchP.getPermissionTypeMask()+permMask);
         }else if(searchP.getPermIsAllowed(permMask) && !urlBoolEnable){
