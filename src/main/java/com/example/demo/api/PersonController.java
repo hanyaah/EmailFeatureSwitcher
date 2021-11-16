@@ -53,7 +53,7 @@ public class PersonController {
         String urlEnable = requestParams.get("enable");
 
         if(!urlEnable.equalsIgnoreCase("true") && !urlEnable.equalsIgnoreCase("false")){
-            /*sending in any */
+            /*any non-empty string will evaluate to true, need to check just in case*/
             return HttpStatus.NOT_MODIFIED;
         }
 
